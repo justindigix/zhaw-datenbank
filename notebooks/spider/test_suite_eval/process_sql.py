@@ -33,7 +33,7 @@ CLAUSE_KEYWORDS = ('select', 'from', 'where', 'group',
 JOIN_KEYWORDS = ('join', 'on', 'as')
 
 WHERE_OPS = ('not', 'between', '=', '>', '<', '>=',
-             '<=', '!=', 'in', 'like', 'is', 'exists')
+             '<=', '!=', 'in', 'like', 'ilike', 'is', 'exists')
 UNIT_OPS = ('none', '-', '+', "*", '/')
 AGG_OPS = ('none', 'max', 'min', 'count', 'sum', 'avg')
 TABLE_TYPE = {

@@ -39,7 +39,7 @@ CLAUSE_KEYWORDS = ('select', 'from', 'where', 'group',
 JOIN_KEYWORDS = ('join', 'on', 'as')
 
 WHERE_OPS = ('not', 'between', '=', '>', '<', '>=',
-             '<=', '!=', 'in', 'like', 'is', 'exists')
+             '<=', '!=', 'in', 'like', 'ilike', 'is', 'exists')
 UNIT_OPS = ('none', '-', '+', "*", '/')
 AGG_OPS = ('none', 'max', 'min', 'count', 'sum', 'avg')
 TABLE_TYPE = {
@@ -53,7 +53,7 @@ ORDER_OPS = ('desc', 'asc')
 
 
 HARDNESS = {
-    "component1": ('where', 'group', 'order', 'limit', 'join', 'or', 'like'),
+    "component1": ('where', 'group', 'order', 'limit', 'join', 'or', 'like', 'ilike'),
     "component2": ('except', 'union', 'intersect')
 }
 
@@ -65,6 +65,9 @@ def condition_has_or(conds):
 def condition_has_like(conds):
     return WHERE_OPS.index('like') in [cond_unit[1] for cond_unit in conds[::2]]
 
+
+def condition_has_ilike(conds):
+    return WHERE_OPS.index('ilike') in [cond_unit[1] for cond_unit in conds[::2]]
 
 def condition_has_sql(conds):
     for cond_unit in conds[::2]:
@@ -284,6 +287,10 @@ def get_keywords(sql):
     # like keyword
     if len([cond_unit for cond_unit in cond_units if cond_unit[1] == WHERE_OPS.index('like')]) > 0:
         res.add('like')
+    
+    # ilike keyword
+    if len([cond_unit for cond_unit in cond_units if cond_unit[1] == WHERE_OPS.index('ilike')]) > 0:
+        res.add('ilike')
 
     return res
 
@@ -324,6 +331,8 @@ def count_component1(sql):
         sql['where'][::2] + sql['having'][::2]
     count += len([cond_unit for cond_unit in cond_units if cond_unit[1]
                  == WHERE_OPS.index('like')])
+    count += len([cond_unit for cond_unit in cond_units if cond_unit[1]
+                 == WHERE_OPS.index('ilike')])
 
     return count
 
